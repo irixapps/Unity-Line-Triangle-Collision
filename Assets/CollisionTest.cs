@@ -4,10 +4,15 @@ using System.Collections;
 public class CollisionTest : MonoBehaviour {
 
 	public Color lineColor  = new Color(1, 0, 0, 1f);
+	public Color lineHitColor  = new Color(1, 1, 1, 1f);
 	public Color triColor  = new Color(1, 1, 0, 1f);
 
 	public Line line;
 	public Triangle Triangle;
+
+	private Vector3 hit;
+	private bool collision = false;
+
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +22,13 @@ public class CollisionTest : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+		collision = false;
+
+		if ( Intersect(Triangle.p0.transform.position, Triangle.p1.transform.position, Triangle.p2.transform.position, line, ref hit))
+		{
+			collision = true;
+			Debug.Log("Collision");
+		}
 
 	}
 
@@ -24,8 +36,19 @@ public class CollisionTest : MonoBehaviour {
 	void OnDrawGizmos() 
 	{
 		// Draw Line
-		Gizmos.color = lineColor;
-		Gizmos.DrawLine(line.p0.transform.position, line.p1.transform.position);
+		if ( collision )
+		{
+			Gizmos.color = lineColor;
+			Gizmos.DrawLine(line.p0.transform.position, hit);
+
+			Gizmos.color = lineHitColor;
+			Gizmos.DrawLine(hit, line.p1.transform.position);
+		}
+		else
+		{
+			Gizmos.color = lineColor;
+			Gizmos.DrawLine(line.p0.transform.position, line.p1.transform.position);
+		}
 	}
 
 	public bool Intersect(Vector3 p1, Vector3 p2, Vector3 p3, Line ray, ref Vector3 hit)

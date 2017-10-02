@@ -14,7 +14,7 @@ public class Line : MonoBehaviour {
 
 	public Vector3 direction
 	{
-		get { return p1.transform.position - p0.transform.position; }
+		get { return (p1.transform.position - p0.transform.position).normalized; }
 	}
 
 
